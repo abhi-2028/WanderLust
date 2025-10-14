@@ -46,26 +46,11 @@ app.get("/listings/:id", async(req,res)=>{
 
 //Create Route
 app.post("/listings", async (req, res) => {
-  console.log(req.body); // <-- check output here
-  const newListing = new Listing(req.body.listing);
-  await newListing.save();
-  res.redirect("/listings");
+    const newListing = new Listing(req.body);
+    await newListing.save();
+    res.redirect("/listings");
+  
 });
-
-
-// app.get("/test", async(req,res)=> {
-//     let samplelisting = new Listing({
-//         title: "my new house",
-//         description: "by the kotha",
-//         price: 999,
-//         location: "Krishnagar, Nadia",
-//         country: "India",
-//     });
-
-//     await samplelisting.save();
-//     console.log("sample was saved");
-//     res.send("saved");
-// })
 
 app.listen(8080, () => {
     console.log('Server is listening to port 8080');

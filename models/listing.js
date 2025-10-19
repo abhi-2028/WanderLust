@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const review = require("./review");
+const Review = require("./review");
 const Schema = mongoose.Schema;
 
 const listingSchema = new Schema({
@@ -7,7 +7,7 @@ const listingSchema = new Schema({
     type: String,
     required: true,
   },
-  description:{
+  description: {
     type: String,
     required: true,
   },
@@ -23,13 +23,13 @@ const listingSchema = new Schema({
   price: {
     type: Number,
     required: true,
-    min: [1,"Price must be greater than 0"],
+    min: [1, "Price must be greater than 0"],
   },
   location: {
     type: String,
     required: true,
   },
-  country:{
+  country: {
     type: String,
     required: true,
   },
@@ -40,6 +40,12 @@ const listingSchema = new Schema({
     }
   ]
 });
+
+listingSchema.post('findOneAndDelete', async (listing) => {
+  if (listing) {
+    await Review.deleteMany({ _id: { $in: listing.reviews } });
+  }
+})
 
 const Listing = mongoose.model("Listing", listingSchema);
 module.exports = Listing;

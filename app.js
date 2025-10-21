@@ -5,19 +5,19 @@ const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError");
+const session = require('express-session');
+const flash = require('express-flash');
 
-const review = require("./routes/review");
-const listing = require("./routes/listing");
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
 main()
-    .then(() => {
-        console.log("connected to db");
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+.then(() => {
+    console.log("connected to db");
+})
+.catch((err) => {
+    console.log(err);
+});
 
 async function main() {
     await mongoose.connect(MONGO_URL);
@@ -30,11 +30,34 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname,"public")));
 
+const sessionOption = {
+    secret: "mysecretKey",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 3,
+        maxAge: 1000 * 60 * 60 * 24 * 3,
+        httpOnly: true   //To prevent cross scripting attacks
+    },
+};
+
+app.use(session(sessionOption));
+app.use(flash());
+
+app.use((req,res,next) => {
+    res.locals.success = req.flash("success");
+    next();
+})
+
+
 app.get("/", (req,res) => {
     res.send('this is root');
 });
 
+
 //Routes
+const review = require("./routes/review");
+const listing = require("./routes/listing");
 app.use("/listings", listing);
 app.use("/listings/:id/reviews", review);
 

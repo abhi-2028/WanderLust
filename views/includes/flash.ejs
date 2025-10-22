@@ -1,14 +1,14 @@
 <% if (success && success.length > 0) { %>
-  <br>
   <div class="alert alert-success alert-dismissible fade show col-6 offset-3" role="alert">
+    <br>
     <%= success.join(", ") %>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
 <% } %>
 
 <% if (error && error.length > 0) { %>
-  <br>
   <div class="alert alert-danger alert-dismissible fade show col-6 offset-3" role="alert">
+    <br>
     <%= error.join(", ") %>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>

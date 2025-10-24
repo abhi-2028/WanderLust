@@ -1,4 +1,7 @@
 const Listing = require('../models/listing');
+const maptilerClient = require("@maptiler/client");
+
+maptilerClient.config.apiKey = process.env.MAPTILER_API_KEY;
 
 module.exports.index = async(req,res) => {
     const allListings = await Listing.find({});
@@ -23,18 +26,26 @@ module.exports.showListing = async(req,res)=>{
         req.flash("error", "Listing does not exist!");
         return res.redirect("/listings");
     }
-    res.render("./listings/show.ejs", {listing});
+    res.render("./listings/show.ejs", {listing , mapTilerKey: process.env.MAPTILER_API_KEY});
 };
 
 module.exports.createListing = async (req, res) => {
-    let url = req.file.path;
-    let filename = req.file.filename;
-    const newListing = new Listing(req.body.listing);
-    newListing.owner = req.user._id; 
-    newListing.image = {url, filename};
-    await newListing.save();
-    req.flash("success", "New Listing Created!");
-    res.redirect("/listings");
+    try{
+        const geoRes = await maptilerClient.geocoding.forward(req.body.listing.location);
+        
+        let url = req.file.path;
+        let filename = req.file.filename;
+        const newListing = new Listing(req.body.listing);
+        newListing.owner = req.user._id; 
+        newListing.image = {url, filename};
+        newListing.geometry = geoRes.features[0].geometry;
+        await newListing.save();
+        req.flash("success", "New Listing Created!");
+        res.redirect("/listings");
+    }catch(err){
+        req.flash("error", "Something went wrong while creating the listing. Please try again.");
+        res.redirect("/listings/new");
+    }
 };
 
 module.exports.renderEditForm = async (req,res) => {

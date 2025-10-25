@@ -1,93 +1,152 @@
-# WanderLust
 
-WanderLust is a Node.js web application for listing and browsing travel accommodations. It uses Express, Mongoose, and EJS for server-side rendering and MongoDB for data storage.
+# 🌍 WanderLust
 
-## Features
+A full-stack Node.js/Express application for creating and browsing travel listings. Built with the MVC pattern, WanderLust supports user authentication, CRUD listings with images (Cloudinary), reviews, maps (Leaflet/Mapbox), and robust server-side validation.
 
-- View all listings
-- Add new listings
-- Edit and delete listings
-- Responsive UI with Bootstrap
-- Sample data initialization
+⚡ Overview
 
-## Project Structure
+**Tech Stack:**
+Node.js · Express · MongoDB (Mongoose) · EJS · Passport · Cloudinary · Leaflet/MapTiler
 
-```
-app.js
-package.json
-init/
-  data.js
-  index.js
-models/
-  listing.js
-public/
-  css/
-    style.css
-views/
-  includes/
-    footer.ejs
-    navbar.ejs
-  layouts/
-    boilerplate.ejs
-  listings/
-    edit.ejs
-    index.ejs
-    new.ejs
-    show.ejs
-```
+**Key Features:**
 
-## Getting Started
+- User signup/login with sessions
+- CRUD listings with image uploads and geolocation
+- Review system
+- Owner-based edit/delete
+- Flash messages & error handling
+- Server-side validation
 
-### Prerequisites
+🧩 Project Structure (MVC)
 
-- Node.js
-- MongoDB
+- Model: `/models/` — Mongoose schemas for listings, reviews, users
+- View: `/views/` — EJS templates & layouts
+- Controller: `/controllers/` — route logic for listings, reviews, users
 
-### Installation
+Other folders:
 
-1. Clone the repository.
-2. Install dependencies:
+- `/routes/` — Express routers
+- `/middleware/` — authentication & authorization
+- `/utils/` — helpers (validation, Cloudinary config, custom errors)
+- `/public/` — static assets
+- `/init/` — seeding or setup scripts
 
-   ```sh
-   npm install
-   ```
+`app.js` — main entry point and Express setup
 
-3. Start MongoDB server locally.
+🚀 Getting Started (Local)
+Prerequisites
 
-### Initialize Sample Data
+- Node.js (v16+)
+- npm or yarn
+- MongoDB (local or Atlas)
+-- Optional: Cloudinary & MapTiler accounts
 
-To seed the database with sample listings, run:
+Installation
 
-```sh
-node init/index.js
+```powershell
+# Clone repo & install dependencies
+git clone https://github.com/abhi-2028/WanderLust.git
+cd WanderLust
+npm install
 ```
 
-### Run the Application
+Environment Setup
 
-```sh
-node app.js
+Create a `.env` file in the root directory:
+
+```text
+MONGO_URI=mongodb://localhost:27017/wanderlust
+PORT=3000
+SECRET=your-session-secret
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_KEY=your-cloud-key
+CLOUDINARY_SECRET=your-cloud-secret
+MAPTILER_KEY=your-maptile-api-key
 ```
 
-The server will start on [http://localhost:8080](http://localhost:8080).
+(Cloudinary/Mapbox are optional — provide mock values for local testing.)
 
-## Usage
+🧠 Run the App
 
-- Visit `/listings` to view all listings.
-- Click "New Listing" to add a new accommodation.
-- Edit or delete listings from their detail page.
+Development:
 
-## Technologies Used
+```powershell
+npm run dev
+```
 
-- Express
-- Mongoose
-- EJS & EJS-Mate
-- Bootstrap
-- Font Awesome
+Production:
 
-## License
+```powershell
+npm start
+```
 
-ISC
+The app runs at http://localhost:3000 by default.
 
-## Author
+You can also inline environment variables (PowerShell example):
 
-Abhirup
+```powershell
+$env:MONGO_URI="mongodb://127.0.0.1:27017/wanderlust"; npm run dev
+```
+
+🗺️ Routes Summary
+
+Below is a concise summary of the main routes. The `Auth` column indicates whether the route typically requires a logged-in user (Auth) or owner privileges (Owner).
+
+Listings
+
+| Method | Path | Description | Auth |
+|---|---|---:|:---:|
+| GET | /listings | View all listings | No |
+| GET | /listings/new | Form to create a new listing | Yes |
+| POST | /listings | Create a new listing | Yes |
+| GET | /listings/:id | Show a single listing | No |
+| GET | /listings/:id/edit | Form to edit a listing | Owner |
+| PUT | /listings/:id | Update a listing | Owner |
+| DELETE | /listings/:id | Delete a listing | Owner |
+
+Reviews
+
+| Method | Path | Description | Auth |
+|---|---|---:|:---:|
+| POST | /listings/:id/reviews | Add a review to a listing | Yes |
+| DELETE | /listings/:id/reviews/:reviewId | Delete a review | Owner / Author |
+
+Users
+
+| Method | Path | Description | Auth |
+|---|---|---:|:---:|
+| GET | /register | Show registration form | No |
+| POST | /register | Register a new user | No |
+| GET | /login | Show login form | No |
+| POST | /login | Log in | No |
+| GET | /logout | Log out current user | Yes |
+
+For exact implementations and middleware checks see the `routes/` and `controllers/` folders.
+
+🧰 Troubleshooting
+
+| Issue | Fix |
+|---|---|
+| MongoNetworkError | Check `MONGO_URI` and MongoDB service |
+| Cloudinary upload fails | Verify `CLOUDINARY_*` credentials |
+| Map not showing | Ensure `MAPTILER_KEY` (if using MapTiler) or Leaflet tile provider setup; check `public/JS/map.js` for the tile URL and key placement |
+| Sessions not persisting | Confirm `SECRET` and session store config |
+
+🤝 Contributing
+
+1. Fork the repo
+2. Create a feature branch
+3. Commit and test your changes
+4. Submit a PR with a clear description
+
+Small, incremental PRs preferred.
+
+📄 License
+
+Licensed under the MIT License. See `LICENSE` for details.
+
+👤 Author
+
+Repository Owner: `@abhi-2028`
+
+For questions or feature requests, open an issue on GitHub.

@@ -47,11 +47,16 @@ body{
 }
 
 .f-info-socials i {
+    color: black;
     display: flex;
     font-size: 1.2rem;
     margin-right: 0.5rem;
     margin-left: 0.5rem;
     justify-content: center;
+}
+
+.f-info-socials a {
+    text-decoration: none;
 }
 
 .f-info{

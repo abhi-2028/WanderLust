@@ -26,29 +26,41 @@
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="/listings"><i class="fa-solid fa-compass"></i></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+      <button class="btn btn-sm me-2 search-toggle d-lg-none mt-4" id="navSearchToggle" type="button" aria-label="Search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+    
+      <div class="navbar-search-inline d-none d-lg-flex" id="navbarSearchInline">
+        <form class="d-flex w-100" role="search" id="navSearchInlineForm" action="/listings" method="GET">
+          <input name="q" class="form-control me-2 search-input-inline" type="search" placeholder="Search Destinations" aria-label="Search" />
+          <button class="btn search-btn-inline" type="submit"><i class="fa-solid fa-magnifying-glass-location"></i></button>
+        </form>
+      </div>
+    <button class="navbar-toggler mt-4" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link" href="/listings">Explore</a>
-      </div>
-      <div class="navbar-nav ms-auto">
-        <form class="d-flex" role="search">
-        <input class="form-control me-2 search-input" type="search" placeholder="Search Destinations" aria-label="Search" />
-        <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass-location"></i>Search</button>
-      </form>
+        <a class="nav-link d-none d-md-block" href="/listings">Explore</a>
       </div>
       <div class="navbar-nav ms-auto">
         <a class="nav-link" href="/listings/new">Airbnb your home</a>
         <% if(!currUser) { %>
           <a class="nav-link active" href="/signup"><b>Sign up</b></a>
           <a class="nav-link" href="/login"><b>Login</b></a>
-          <% } %>
-            <% if(currUser) { %>
-              <a class="nav-link" href="/logout"><b>Log Out</b></a>
-              <% } %>
+        <% } %>
+        <% if(currUser) { %>
+          <a class="nav-link" href="/logout"><b>Log Out</b></a>
+        <% } %>
       </div>
+    </div>
+
+    <div class="navbar-search-overlay d-none" id="navbarSearchOverlay">
+      <form class="d-flex w-100" role="search" id="navSearchForm" action="/listings" method="GET">
+        <input name="q" class="form-control me-2 search-input" type="search" placeholder="Search Destinations" aria-label="Search" />
+        <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass-location"></i></button>
+        <button type="button" class="btn btn-close ms-2" id="navSearchClose" aria-label="Close"></button>
+      </form>
     </div>
   </div>
 </nav>
